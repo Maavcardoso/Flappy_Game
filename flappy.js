@@ -14,11 +14,14 @@ function obsGenerator(){
         canoBaixo.classList.add('cano')
         obstaculo.appendChild(canoCima)
 
-        let randomNum = (Math.floor(Math.random() * 11) + 4 ) * 5
+        let randomNum = (Math.floor(Math.random() * 13) + 4 ) * 5
 
         canoCima.style.height = randomNum + '%'
-        canoBaixo.style.height =  (70 - randomNum )  + '%' 
+
+        if(randomNum < 80){
         obstaculo.appendChild(canoBaixo)
+        canoBaixo.style.height =  (80 - randomNum )  + '%'
+        } 
         obstaculo.style.left = '100%'
         obsTime(obstaculo)
 }
@@ -52,16 +55,26 @@ player.setAttribute('id','player')
 conteudo.appendChild(player)
 document.getElementById('player').src = 'imgs/passaro.png'
 
+
 let playerTop = 50
 
-var gravity = setInterval(()=>{
-    playerTop += 1
-    player.style.top = (playerTop)+'%'
+let gravityVerifier = true
 
-},100)
+var gravity = 
+    
+    setInterval(()=>{
+        if(playerTop < 95)
+        playerTop += 0.2
+        player.style.top = (playerTop) + '%'
+},10)
 
 document.addEventListener('keydown',()=>{
-    clearInterval(gravity)
-    playerTop -= 1
-    player.style.top = (playerTop)+'%';
+    if(playerTop > 2){
+    playerTop -= 2
+    player.style.top = (playerTop) + '%';
+    }
 })
+const delay = 2;
+const limit = 2;
+let i = 1;
+
