@@ -1,4 +1,3 @@
-
 const conteudo = document.querySelector('div[wm-flappy]')
 
 function obsGenerator(){
@@ -46,13 +45,23 @@ function obsGenRepeater () {
 }
 obsGenRepeater()
 
+
 const player = document.createElement('img')
+
 player.setAttribute('id','player')
 conteudo.appendChild(player)
 document.getElementById('player').src = 'imgs/passaro.png'
-player.style.position = 'absolute'
-let playerTop = 
-player.addEventListener('keydown',()=>{
-    
-    player.style.top =+ 1;
+
+let playerTop = 50
+
+var gravity = setInterval(()=>{
+    playerTop += 1
+    player.style.top = (playerTop)+'%'
+
+},100)
+
+document.addEventListener('keydown',()=>{
+    clearInterval(gravity)
+    playerTop -= 1
+    player.style.top = (playerTop)+'%';
 })
