@@ -1,7 +1,10 @@
+
 const conteudo = document.querySelector('div[wm-flappy]')
 
-function obsGenerator(){
+// *** Controla criação dos obstaculos ***
 
+function obsGenerator(){
+    // Cria conjunto de canos
         const obstaculo = document.createElement('div')
 
         obstaculo.setAttribute('id','obstaculo')
@@ -14,20 +17,22 @@ function obsGenerator(){
         canoBaixo.classList.add('cano')
         obstaculo.appendChild(canoCima)
 
+    // Controla aleatoriedade dos canos
         let randomNum = (Math.floor(Math.random() * 13) + 4 ) * 5
-
         canoCima.style.height = randomNum + '%'
 
+    // Se o cano de cima for maior que 80% da altura, cria apenas um gap
         if(randomNum < 80){
-        obstaculo.appendChild(canoBaixo)
-        canoBaixo.style.height =  (80 - randomNum )  + '%'
+            obstaculo.appendChild(canoBaixo)
+            canoBaixo.style.height =  (80 - randomNum )  + '%'
         } 
+    // Seta obstáculo p/ a animação.
         obstaculo.style.left = '100%'
         obsTime(obstaculo)
-}
+};
 
 
-
+// Controla o movimento / destruição dos obstáculos
 function obsTime(div){
 var obsPos = 100
 var obsInterval = setInterval(function obsMove(){
@@ -38,15 +43,16 @@ var obsInterval = setInterval(function obsMove(){
         conteudo.removeChild(div)
     }
     },10)
-}
+};
 
+// Controla quantos obstáculos são criados
 function obsGenRepeater () {
     obsGenerator()
     setInterval(()=>{ 
         obsGenerator()
-    }, 4000)
-}
-obsGenRepeater()
+    }, 3000)
+};
+obsGenRepeater();
 
 
 const player = document.createElement('img')
@@ -56,25 +62,36 @@ conteudo.appendChild(player)
 document.getElementById('player').src = 'imgs/passaro.png'
 
 
+
+
 let playerTop = 50
+var gravity;
+var playerMoveCheck = false
 
-let gravityVerifier = true
-
-var gravity = 
-    
-    setInterval(()=>{
-        if(playerTop < 95)
-        playerTop += 0.2
-        player.style.top = (playerTop) + '%'
-},10)
 
 document.addEventListener('keydown',()=>{
+    playerMoveCheck = true
     if(playerTop > 2){
-    playerTop -= 2
+    playerTop -= 8
     player.style.top = (playerTop) + '%';
     }
 })
-const delay = 2;
-const limit = 2;
-let i = 1;
+document.addEventListener('keyup', ()=>{
+    playerMoveCheck = false
+})
+
+
+var gravityCallback = function(){
+    if(playerMoveCheck === false)
+    setInterval(()=>{
+        if(playerTop < 95)
+        playerTop += 0.5
+        player.style.top = (playerTop) + '%'
+},20)
+    else{
+    clearInterval(gravity)
+    }
+};
+  gravityCallback()
+
 
