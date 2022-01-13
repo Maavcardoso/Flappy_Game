@@ -2,17 +2,20 @@ const conteudo = document.querySelector('div[wm-flappy]')
 
 
 // *** Controla criação dos obstaculos ***
-
 function obsGenerator(){
-    // Cria conjunto de canos
-        const obstaculo = document.createElement('div')
 
+    // Cria o objeto.
+        const obstaculo = document.createElement('div')
         obstaculo.setAttribute('id','obstaculo')
         conteudo.appendChild(obstaculo)
 
+    // Cria conjunto de canos (Divs)
         const canoCima = document.createElement('div')
+        canoCima.setAttribute('id','canoCima')
+        obsHeight = obstaculo.getBoundingClientRect()
+        console.log(obsHeight.height)
         const canoBaixo = document.createElement('div')
-
+        canoBaixo.setAttribute('id','canoBaixo')
         canoCima.classList.add('cano')
         canoBaixo.classList.add('cano')
         obstaculo.appendChild(canoCima)
@@ -20,11 +23,17 @@ function obsGenerator(){
     // Controla aleatoriedade dos canos
         let randomNum = (Math.floor(Math.random() * 13) + 4 ) * 5
         canoCima.style.height = randomNum + '%'
+        let canoCimaY = canoCima.getBoundingClientRect()
+        console.log('canoCimaHeight', canoCimaY.height)
+        //console.log('canoCimaY', canoCimaY.top)
 
     // Se o cano de cima for maior que 80% da altura, cria apenas um gap
         if(randomNum < 80){
             obstaculo.appendChild(canoBaixo)
             canoBaixo.style.height =  (80 - randomNum )  + '%'
+            let canoBaixoY = canoBaixo.getBoundingClientRect()
+            console.log('canoBaixoHeight', canoBaixoY.height)
+           // console.log('canoBaixoY', canoBaixoY.top)
         } 
     // Seta obstáculo p/ a animação.
         obstaculo.style.left = '100%'
@@ -34,10 +43,12 @@ function obsGenerator(){
 
 // Controla o movimento / destruição dos obstáculos
 function obsTime(div){
-var obsPos = 100
-var obsInterval = setInterval(function obsMove(){
+
+let obsPos = 100
+let obsInterval = setInterval(function obsMove(){
     obsPos = obsPos - 0.1
     div.style.left = obsPos + '%' 
+    obsX = div.getBoundingClientRect()
     if(obsPos < -15){
         clearInterval(obsInterval)
         conteudo.removeChild(div)
@@ -50,8 +61,8 @@ function obsGenRepeater () {
     obsGenerator()
 let obsGeneratorInterval = setInterval(()=>{ 
         obsGenerator()
-        
-    }, 3000)
+    
+    }, 5000)
 };
 obsGenRepeater();
 
@@ -86,9 +97,9 @@ function playerMove(player){
         if(playerMoveCheck === false)
         setInterval(()=>{
             if(playerTop < 95)
-            playerTop += 0.5
+            playerTop += 0.3
             player.style.top = (playerTop) + '%'
-        },20)
+        },10)
         else{
             clearInterval(gravity)
         }
@@ -98,10 +109,9 @@ function playerMove(player){
 
 // Colisão dos objetos
 
-
-var boxCollision = setInterval(()=>{
-    console.log(player.x)
-},1000)
+// var boxCollision = setInterval(()=>{
+//      console.log(player.y)
+//  },1000)
 
 
 
