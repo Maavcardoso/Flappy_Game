@@ -1,6 +1,12 @@
+let conteudo = document.querySelector('div[wm-flappy]')
+let gameOverCheck = false
 
-const conteudo = document.querySelector('div[wm-flappy]')
-
+// Cria o passáro
+const player = document.createElement('img')
+player.setAttribute('id','player')
+conteudo.appendChild(player)
+player.src = 'imgs/passaro.png'
+playerMove(player)
 
 // *** Controla criação dos obstaculos ***
 function obsGenerator(){
@@ -13,9 +19,6 @@ function obsGenerator(){
     // Cria conjunto de canos (Divs)
         const canoCima = document.createElement('div')
         canoCima.setAttribute('id','canoCima')
-        obsHeight = obstaculo.getBoundingClientRect()
-        console.log('obsHeight',obsHeight.height)
-        console.log('obsY', obsHeight.y)
         const canoBaixo = document.createElement('div')
         canoBaixo.setAttribute('id','canoBaixo')
         canoCima.classList.add('cano')
@@ -25,22 +28,20 @@ function obsGenerator(){
     // Controla aleatoriedade dos canos
         let randomNum = (Math.floor(Math.random() * 13) + 4 ) * 5
         canoCima.style.height = randomNum + '%'
-        let canoCimaY = canoCima.getBoundingClientRect()
-        console.log('canoCimaHeight', canoCimaY.height + canoCimaY.y)
-
-        //console.log('canoCimaY', canoCimaY.top)
 
     // Se o cano de cima for maior que 80% da altura, cria apenas um gap
         if(randomNum < 80){
             obstaculo.appendChild(canoBaixo)
             canoBaixo.style.height =  (80 - randomNum )  + '%'
-            let canoBaixoY = canoBaixo.getBoundingClientRect()
-            console.log('canoBaixoHeight', canoBaixoY.y)
-           // console.log('canoBaixoY', canoBaixoY.top)
         } 
     // Seta obstáculo p/ a animação.
         obstaculo.style.left = '100%'
         obsTime(obstaculo)
+        let canoCimaCollider = document.getElementById('canoCima')
+        let playerCollider = document.getElementById('player')
+        let canoBaixoCollider = document.getElementById('canoBaixo')
+        var boxCollisionTimer = boxCollision(canoCimaCollider, playerCollider, canoBaixoCollider)
+        
 };
 
 
@@ -51,7 +52,6 @@ let obsPos = 100
 let obsInterval = setInterval(function obsMove(){
     obsPos = obsPos - 0.1
     div.style.left = obsPos + '%' 
-    obsX = div.getBoundingClientRect()
     if(obsPos < -15){
         clearInterval(obsInterval)
         conteudo.removeChild(div)
@@ -65,22 +65,14 @@ function obsGenRepeater () {
 let obsGeneratorInterval = setInterval(()=>{ 
         obsGenerator()
     
-    }, 15000)
+    }, 3000)
 };
 obsGenRepeater();
-
-// Cria o passáro
-const player = document.createElement('img')
-player.setAttribute('id','player')
-conteudo.appendChild(player)
-document.getElementById('player').src = 'imgs/passaro.png'
-playerMove(player)
 
 // Controla movimento do jogador
 function playerMove(player){
 
     let playerTop = 50
-    let gravity;
     let playerMoveCheck = false   
 
     document.addEventListener('keydown',()=>{
@@ -96,7 +88,7 @@ function playerMove(player){
     })
 
 
-    var gravityCallback = function(){
+    let gravityCallback = function(){
         if(playerMoveCheck === false)
         setInterval(()=>{
             if(playerTop < 95)
@@ -104,7 +96,7 @@ function playerMove(player){
             player.style.top = (playerTop) + '%'
         },10)
         else{
-            clearInterval(gravity)
+            clearInterval()
         }
     };
     gravityCallback()
@@ -112,10 +104,37 @@ function playerMove(player){
 
 // Colisão dos objetos
 
-var boxCollision = setInterval(()=>{
-     console.log(player.y)
- },1000)
+function boxCollision(canoCimaCollider, playerCollider, canoBaixoCollider){ 
+    setInterval(()=>{
+    let canoCimaAxis = canoCimaCollider.getBoundingClientRect()
+    let playerAxis = playerCollider.getBoundingClientRect()
 
+    if (canoBaixoCollider != null){
+        let canoBaixoAxis = canoBaixoCollider.getBoundingClientRect()
+        if (playerAxis.x + playerAxis.width >= canoCimaAxis.x &&
+            playerAxis.x <= canoCimaAxis.x + canoCimaAxis.width && (
+                canoCimaAxis.y + canoCimaAxis.height >= playerAxis.y ||
+                canoBaixoAxis.y < playerAxis.y + playerAxis.height ) 
+            ){
+            console.log('encostou')
+
+            }
+        
+    } else {
+
+        if (playerAxis.x + playerAxis.width >= canoCimaAxis.x &&
+            playerAxis.x <= canoCimaAxis.x + canoCimaAxis.width && 
+            canoCimaAxis.y + canoCimaAxis.height >= playerAxis.y 
+
+        ){
+            console.log(myInterval) 
+            
+        }
+    }
+
+}, 10)
+
+};
 
 
 // Toca a música
@@ -125,3 +144,4 @@ var boxCollision = setInterval(()=>{
 //         audio.play()
 //     }, 1)
 // };
+
