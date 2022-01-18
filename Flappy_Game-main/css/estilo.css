@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@font-face {
+    font-family: 'Oswald';
+    src: url('../fonts/Oswald-Regular.ttf') format('truetype');
+}
+
+* {
+    font-family: 'VT323', monospace;
+}
+
+h1 {
+    text-shadow: 0 0 1vw #FA1C16, 0 0 3vw #FA1C16;
+    color: #FED128;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: #0D262D;
+    color: #fff;
+    height: 100%;
+}
+
+button{
+    border: none;
+    background: none;
+    height: 40px;
+    width: 65px;
+    padding-top: 10px;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    
+}
+button:hover{
+    text-shadow:0 0 1vw #1041FF, 0 0 3vw #1041FF, 0 0 10vw #1041FF, 0 0 10vw #1041FF, 0 0 .4vw #8BFDFE;
+    color: #28D7FE;
+}
+
+
+
+.conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100%;
+}
+
+.exercicio div {
+    font-size: 3em;
+    border: solid 5px #fff;
+    padding: 20px 40px;
+    margin: 10px;
+}
+
+.exercicio div:nth-of-type(1) {
+    background-color: darkgoldenrod;
+}
+
+.exercicio div:nth-of-type(2) {
+    background-color: crimson;
+}
+
+.exercicio div:nth-of-type(3) {
+    background-color: darkcyan;
+}
+
+.exercicio div:nth-of-type(4) {
+    background-color: darkorchid;
+}
+
+.exercicio .destaque {
+    border: solid 10px greenyellow;
+    color: greenyellow;
+    font-weight: bold;
+}
+
