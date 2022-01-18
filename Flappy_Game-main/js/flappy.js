@@ -83,8 +83,9 @@ function obsGenerator(){
         let canoCimaCollider = canoCima
         let playerCollider = document.getElementById('player')
         let canoBaixoCollider = canoBaixo 
+        let conteudoCollider = conteudo
     // Inicia Animação / Colisor / Score
-        boxCollision(canoCimaCollider, playerCollider, canoBaixoCollider)
+        boxCollision(canoCimaCollider, playerCollider, canoBaixoCollider, conteudoCollider)
         obsTime(obstaculo)
     
 };
@@ -128,8 +129,8 @@ function playerMove() {
 // 'Gravidade' (Puxa o passáro quando o jogador está parado)
 
 let gravityCallback = setInterval(()=>{
-    if(playerTop < 95){
-    playerTop += 0.1
+    if(playerTop < 98){
+    playerTop += 0.125
     player.style.top = (playerTop) + '%'
     }else{
         clearInterval()
@@ -137,19 +138,23 @@ let gravityCallback = setInterval(()=>{
 },1)
 
 // Colisão dos objetos
-function boxCollision(canoCimaCollider, playerCollider, canoBaixoCollider){ 
+function boxCollision(canoCimaCollider, playerCollider, canoBaixoCollider, obsCollider){ 
     var collisionCheck = setInterval(()=>{
     let canoCimaAxis = canoCimaCollider.getBoundingClientRect()
     let playerAxis = playerCollider.getBoundingClientRect()
     let canoBaixoAxis = canoBaixoCollider.getBoundingClientRect()
+    let conteudoAxis = obsCollider.getBoundingClientRect()
     if(canoBaixoAxis.height == 0){
-        canoBaixoAxis.y = 560
+        canoBaixoAxis.y = 1000
     }
+
         // Game Over
-        if (playerAxis.x + playerAxis.width >= canoCimaAxis.x &&
+        if ((playerAxis.x + playerAxis.width >= canoCimaAxis.x &&
             playerAxis.x <= canoCimaAxis.x + canoCimaAxis.width && (
                 canoCimaAxis.y + canoCimaAxis.height >= playerAxis.y ||
-                canoBaixoAxis.y < playerAxis.y + playerAxis.height ) 
+                canoBaixoAxis.y < playerAxis.y + playerAxis.height )) ||
+                (conteudoAxis.height + (conteudoAxis.y*0.98)) < playerAxis.y + playerAxis.height
+                
             ){
             gameOverCheck= true
             clearInterval(obsGeneratorInterval)
