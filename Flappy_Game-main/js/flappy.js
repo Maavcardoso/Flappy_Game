@@ -3,33 +3,41 @@ let body = document.querySelector('body')
 
 const playButton = document.createElement('button')
 body.appendChild(playButton)
-playButton.innerText = 'Play'
 
-var gameOverCheck = false
+var gameOverCheck 
+
+playButton.innerText = 'Play'
 
 
 var buttonChecker = setInterval(()=>{
 
-    if (gameOverCheck === true){
-        body.appendChild(playButton)
-        playButton.innerText = 'Again?'
-
-    }else{
-
+    if (gameOverCheck != true ){
         playButton.onclick = ()=>{
-            conteudo.innerHTML = ''
-            body.removeChild(playButton)
-            flappyGame()
             gameOverCheck = false
+            playButton.innerHTML = ''
+            playButton.disabled = true
+            flappyGame()
         }
-        
+    } else {
+        playButton.disabled = false
+        playButton.innerHTML = 'Again?'
+        playButton.onmousedown = ()=>{
+        conteudo.innerHTML = ''
+        }
+        playButton.onclick = ()=>{
+            gameOverCheck = false
+            playButton.disabled = true
+            playButton.innerHTML = ''
+            flappyGame()
+        }
     }
-},1)
+},10)
 
 
     
 
 function flappyGame(){
+    
 
 // Cria o passáro
 const player = document.createElement('img')
@@ -56,6 +64,7 @@ function obsGenerator(){
         const obstaculo = document.createElement('div')
         obstaculo.setAttribute('id','obstaculo')
         conteudo.appendChild(obstaculo)
+        gameOverCheck = false
 
     // Cria conjunto de canos (Divs)
         const canoCima = document.createElement('div')
@@ -67,7 +76,7 @@ function obsGenerator(){
         obstaculo.appendChild(canoCima)
 
     // Controla aleatoriedade dos canos
-        let randomNum = (Math.floor(Math.random() * 13) + 4 ) * 5
+        let randomNum = (Math.floor(Math.random() * 7) + 2 ) * 10
         //let randomNum = (Math.floor(Math.random() * 2) + 7 ) * 10  // Teste p/ Cenário com canoBaixo = null
         canoCima.style.height = randomNum + '%'
 
@@ -109,7 +118,7 @@ let obsInterval = setInterval(function obsMove(){
 
 // Controla quantos obstáculos são criados
 var obsGeneratorInterval = setInterval(()=>{obsGenerator()}, 3000)
-obsGenerator();
+obsGenerator()
 
 
 // Controla movimento do jogador
@@ -130,7 +139,7 @@ function playerMove() {
 
 let gravityCallback = setInterval(()=>{
     if(playerTop < 98){
-    playerTop += 0.125
+    playerTop += 0.12
     player.style.top = (playerTop) + '%'
     }else{
         clearInterval()
@@ -145,7 +154,7 @@ function boxCollision(canoCimaCollider, playerCollider, canoBaixoCollider, obsCo
     let canoBaixoAxis = canoBaixoCollider.getBoundingClientRect()
     let conteudoAxis = obsCollider.getBoundingClientRect()
     if(canoBaixoAxis.height == 0){
-        canoBaixoAxis.y = 1000
+        canoBaixoAxis.y = (conteudoAxis.height + (conteudoAxis.y*0.98))
     }
 
         // Game Over
@@ -172,6 +181,4 @@ function boxCollision(canoCimaCollider, playerCollider, canoBaixoCollider, obsCo
     ,1)
     
 };
-
 }
-
